@@ -1,0 +1,24 @@
+{% extends 'common.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<div class='row'>
+    <div class="col-lg-6 col-md-12">
+              <div class="card">
+                <div class="card-header card-header-primary">
+                  <h4 class="card-title">Add Your Notes</h4>
+                  <p class="card-category">Add Your Notes in {{user.get_username}}'s account</p>
+                </div>
+                <div class="card-body table-responsive">
+                    <form method='POST' class='container'>
+                        {% csrf_token %}
+                        {{form | crispy }}
+                        <input type="submit" class="btn btn-primary">
+                    </form>
+                </div>
+              </div>
+            </div>
+  
+        </div>
+</div>
+{% endblock content %}
