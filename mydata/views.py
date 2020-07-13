@@ -12,14 +12,24 @@ from django.contrib.auth import login,logout,authenticate
 def index(request):
     if request.method == 'POST':
         form = AddNoteForm(request.POST)
+        
         if form.is_valid():
-            form.save()
+          
             notetitle = form.cleaned_data.get('title')
+            notecontent = form.cleaned_data.get('content')
+            notecretaedate = form.cleaned_data.get('created_date')
+            noteupdateddate = form.cleaned_data.get('updated_date')
+            usr = request.user
+
+            qry = Info.objects.create(title= notetitle,content= notecontent,created_date=notecretaedate,updated_date=noteupdateddate, note_user=usr)
+            qry.save()
             messages.success(request, f'Note Added For {notetitle} ')
             return redirect('index')        
     else :
         form = AddNoteForm()
-    mynotes = Info.objects.all()
+        usr = request.user
+    mynotes = Info.objects.filter(note_user=request.user).order_by('-pk')
+
     context = {'form': form, 'notes': mynotes}
     return render(request, 'index.html', context )
 
@@ -42,15 +52,21 @@ def edit_note(request, pk):
     if request.method == 'POST':
         form = AddNoteForm(request.POST)
         if form.is_valid():
-            form.save()
+            notetitle = form.cleaned_data.get('title')
+            notecontent = form.cleaned_data.get('content')
+            notecreateddate = form.cleaned_data.get('created_date')
+            noteediteddate = form.cleaned_data.get('updated_date')
+            usr = request.user
+            qry = Info.objects.create(title=notetitle,content=notecontent,created_date=notecreateddate,updated_date=noteediteddate,note_user=usr)
+            qry.save()
             Info.objects.filter(pk=pk).delete()
             return redirect('index')
     else:
         form = AddNoteForm({
-            'title':title,
+            'title':title,                      
             'content':content,
         })  
-    context = {'form': form, 'notes': Info.objects.all()}  
+    context = {'form': form, 'notes': Info.objects.filter(note_user=request.user).order_by('-pk')}  
     return render(request,'index.html',context)
 
 # USER SECTION
