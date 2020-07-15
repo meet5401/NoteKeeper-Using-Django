@@ -25,7 +25,7 @@ SECRET_KEY = 'e-adya=2j%-@xgmi6@d32b4w@veay+eozcb9o(781xxhcngr8a'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['notekeeperbymeet.herokuapp.com']
 
 
 # Application definition
